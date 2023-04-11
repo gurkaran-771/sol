@@ -1,24 +1,100 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.http://thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-            crossorigin="anonymous"
-        />
-        <title>List</title>
-    </head>
-    <body>
-        <div class="container-sm" th:each="clothe : ${clothes_list}">
-            <p class="text-primary" th:text="${clothe.name}"></p>
-            <p th:text="|price: $${clothe.price}|"></p>
-            <p th:text="|year: ${clothe.yearOfCreation}|"></p>
-            <p th:text="| ${clothe.brand}|"></p>
-            <hr />
-        </div>
-    </body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+         crossorigin="anonymous"
+      />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+         rel="stylesheet"
+      />
+      <title>Clothes</title>
+   </head>
+   <body class="container-lg">
+      <h1 class="text-center mt-5">List</h1>
+      <div
+         class="d-flex flex-column bd-highlight justify-content-center align-items-center w-75 ms-5"
+      >
+         <form class="mt-3" method="GET" th:object="${clothesByDateDto}">
+            <div class="mb-3">
+               <label for="clotheName" class="form-label">Clothe name: </label>
+               <input
+                  type="text"
+                  class="form-control"
+                  id="clotheName"
+                  th:field="*{name}"
+                  aria-describedby="clotheHelp"
+               />
+               <div id="clotheHelp" class="form-text">
+                  Provide decent name for clothes
+               </div>
+            </div>
+            <div class="mb-3">
+               <label for="startDate" class="form-label">Start Date: </label>
+               <input
+                  type="date"
+                  id="startDate"
+                  th:field="*{startDate}"
+                  name="startDate"
+                  value="2023-02-17"
+               />
+            </div>
+            <div class="mb-3">
+               <label for="endDate" class="form-label">End Date: </label>
+               <input
+                  type="date"
+                  id="endDate"
+                  th:field="*{endDate}"
+                  name="endDate"
+                  value="2023-02-17"
+               />
+            </div>
+            <button class="btn btn-primary mt-5">Search</button>
+         </form>
+      </div>
+      <div
+         class="d-flex justify-content-center align-items-center flex-row flex-wrap"
+      >
+         <div
+            th:each="clothe : ${clothes}"
+            class="card m-3 p-1"
+            style="width: 18rem"
+         >
+            <div class="card-body">
+               <div class="d-flex justify-content-between">
+                  <code th:text="${clothe.brand}" class="card-text"></code>
+                  <code
+                     th:text=" ${clothe.yearOfCreation}"
+                     class="card-text"
+                  ></code>
+               </div>
+               <div class="mb-3"></div>
+               <h5 th:text="${clothe.name}" class="card-title"></h5>
+               <p th:text="|price: ${clothe.price}|" class="card-text"></p>
+            </div>
+         </div>
+      </div>
+       <ul class="pagination mt-5">
+          <li class="page-item">
+            <a class="page-link" th:href="@{/clothesList/switchPage(pageToSwitch=${currentPage - 1})}">Previous</a>
+          </li>
+          <li
+            class="page-item"
+            th:classappend="${currentPage + 1 eq page} ? 'active' : 'not'"
+            th:each="page: ${#numbers.sequence(1, totalPages)}"
+          >
+            <a class="page-link" th:text="${page}" th:href="@{/clothesList/switchPage(pageToSwitch=${page - 1})}" />
+          </li>
+          <li class="page-item"><a class="page-link" th:href="@{/clothesList/switchPage(pageToSwitch=${currentPage + 1})}">Next</a></li>
+        </ul>
+      </nav>
+   </body>
 </html>

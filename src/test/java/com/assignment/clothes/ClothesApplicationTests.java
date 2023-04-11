@@ -1,10 +1,10 @@
-package com.assignment.sol;
+package com.assignment.clothes;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SolApplicationTests {
+class ClothesApplicationTests {
 
 	@Test
 	void contextLoads() {
